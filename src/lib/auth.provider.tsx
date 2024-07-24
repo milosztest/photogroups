@@ -34,7 +34,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     } = supabase.auth.onAuthStateChange((_event, session) => {
       setSession(session)
       if (session) {
-        supabase.from("profiles").select("role").single().then((response) => { response.data ? setRole(response.data.role) : null })
+        supabase.from("profiles").select("role")
+        .eq("user_id", session.user.id).single()
+        .then((response) => { response.data ? setRole(response.data.role) : null })
       }
       if (!session) {
         setRole(null)

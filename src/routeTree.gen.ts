@@ -16,6 +16,7 @@ import { Route as rootRoute } from './routes/__root'
 import { Route as PasswordImport } from './routes/password'
 import { Route as AuthImport } from './routes/_auth'
 import { Route as AppImport } from './routes/_app'
+import { Route as AppAdminImport } from './routes/_app.admin'
 import { Route as AppAccountImport } from './routes/_app.account'
 import { Route as AppAlbumsIndexImport } from './routes/_app.albums.index'
 import { Route as AppAlbumsAlbumIDImport } from './routes/_app.albums.$albumID'
@@ -81,6 +82,11 @@ const AuthActivationLazyRoute = AuthActivationLazyImport.update({
 } as any).lazy(() =>
   import('./routes/_auth.activation.lazy').then((d) => d.Route),
 )
+
+const AppAdminRoute = AppAdminImport.update({
+  path: '/admin',
+  getParentRoute: () => AppRoute,
+} as any)
 
 const AppAccountRoute = AppAccountImport.update({
   path: '/account',
@@ -158,6 +164,13 @@ declare module '@tanstack/react-router' {
       path: '/account'
       fullPath: '/account'
       preLoaderRoute: typeof AppAccountImport
+      parentRoute: typeof AppImport
+    }
+    '/_app/admin': {
+      id: '/_app/admin'
+      path: '/admin'
+      fullPath: '/admin'
+      preLoaderRoute: typeof AppAdminImport
       parentRoute: typeof AppImport
     }
     '/_auth/activation': {
@@ -239,6 +252,7 @@ export const routeTree = rootRoute.addChildren({
   IndexLazyRoute,
   AppRoute: AppRoute.addChildren({
     AppAccountRoute: AppAccountRoute.addChildren({ AppAccountConfirmRoute }),
+    AppAdminRoute,
     AppAlbumsAlbumIDRoute: AppAlbumsAlbumIDRoute.addChildren({
       AppAlbumsAlbumIDPhotoIDRoute,
     }),

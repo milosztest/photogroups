@@ -25,10 +25,10 @@ export const Route = createFileRoute('/_app')({
   component: AppLayout,
 })
 
-
 function AppLayout() {
   const navigate = useNavigate()
   const supabase = useGlobalStore(state => state.auth.supabase)
+  const role = useGlobalStore(state => state.auth.role)
   const handleLogout = async () => {
     await supabase?.auth.signOut()
     await navigate({ to: '/login' })
@@ -36,7 +36,7 @@ function AppLayout() {
   return (
     <div className="grid min-h-screen w-full md:grid-cols-[220px_1fr] lg:grid-cols-[280px_1fr]">
       <aside className="hidden border-r bg-muted/40 md:block md:min-w-[220px] lg:min-w-[280px]">
-        <AppNavigation />
+        <AppNavigation role={role} />
       </aside>
       <div className='flex-1'>
         <header className="flex h-14 items-center gap-4 border-b bg-muted/40 px-4 lg:h-[60px] lg:px-6">
@@ -52,7 +52,7 @@ function AppLayout() {
               </Button>
             </SheetTrigger>
             <SheetContent side="left" className="flex flex-col">
-              <AppNavigation />
+              <AppNavigation role={role} />
             </SheetContent>
           </Sheet>
           <div className="flex-1" />

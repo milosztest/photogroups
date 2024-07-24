@@ -1,5 +1,5 @@
 import { Link } from '@tanstack/react-router'
-import { Badge, Camera, Settings, ShoppingCart, UserRound } from 'lucide-react'
+import { Badge, Camera, Settings, ShoppingCart, UserRound, UserRoundCog } from 'lucide-react'
 
 function ActiveBadge() {
   return (
@@ -12,14 +12,15 @@ const pages: [string, string, JSX.Element, boolean][] = [
   ['/albums', "Albumy", <Camera className="h-5 w-5" />, true],
   ['/orders', "Zamówienia", <ShoppingCart className="h-5 w-5" />, false],
   ['/setting', "Ustawienia", <Settings className="h-5 w-5" />, false],
-  ['/account', "Moje dane", <UserRound className="h-5 w-5" />, true]
+  ['/account', "Moje dane", <UserRound className="h-5 w-5" />, true],
+  ['/admin', "Panel administracyjny", <UserRoundCog className="h-5 w-5" />, true],
 ] as const
 
 
-export default function AppNavigation() {
+export default function AppNavigation({ role }: { role?: string | null }) {
   return (
     <nav className="grid gap-2 text-lg font-medium p-2  pt-4">
-      {pages.map(page => (
+      {pages.filter(page => !(page[0] == '/admin' && role != 'admin')).map(page => (
         <Link
           key={page[0]}
           to={page[0]}
